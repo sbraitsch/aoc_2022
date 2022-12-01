@@ -18,17 +18,20 @@ pub fn day1() {
             }
         }
     }
-    let sol_1 = solution_1(&sum_vec);
-    let sol_2 = solution_2(sum_vec.iter().copied().collect::<BinaryHeap<usize>>());
+
+    let mut bin_heap = sum_vec.iter().copied().collect::<BinaryHeap<usize>>();
+
+    let sol_1 = solution_1(&mut bin_heap);
+    let sol_2 = solution_2(&mut bin_heap);
 
     println!("Day 1 | Part 1: {:?}\nDay 1 | Part 2: {:?}", sol_1, sol_2);
 }
 
-pub fn solution_1(calories: &Vec<usize>) -> usize {
-    *calories.iter().max().unwrap()
+pub fn solution_1(calories: &mut BinaryHeap<usize>) -> usize {
+    calories.pop().unwrap()
 }
 
-fn solution_2(mut calories: BinaryHeap<usize>) -> usize {
+fn solution_2(calories: &mut BinaryHeap<usize>) -> usize {
     let mut top_three_sum = 0;
     for _ in 0..3 {
         if let Some(top) = calories.pop() {
