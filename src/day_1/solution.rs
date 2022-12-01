@@ -26,7 +26,7 @@ pub fn day1() {
 }
 
 pub fn solution_1(calories: &mut BinaryHeap<usize>) -> usize {
-    calories.pop().unwrap()
+    *calories.peek().unwrap()
 }
 
 fn solution_2(calories: &mut BinaryHeap<usize>) -> usize {
