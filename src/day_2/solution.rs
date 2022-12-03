@@ -1,6 +1,7 @@
 use core::panic;
 use std::ops;
-#[path = "../util/file_reader.rs"] mod fr;
+use super::utils::read_lines;
+
 
 #[derive(Clone, Copy, PartialEq)]
 enum RPS {
@@ -63,7 +64,7 @@ pub fn day2() {
 
 fn solution_1() -> u32 {
     let mut temp_sum: u32 = 0;
-    if let Ok(lines) = fr::read_lines("src/day_2/input.txt") {
+    if let Ok(lines) = read_lines("src/day_2/input.txt") {
         for line in lines {
             if let Ok(calories) = line {
                 let opp_choice: RPS;
@@ -83,7 +84,7 @@ fn solution_1() -> u32 {
 
 fn solution_2() -> u32 {
     let mut temp_sum: u32 = 0;
-    if let Ok(lines) = fr::read_lines("src/day_2/input.txt") {
+    if let Ok(lines) = read_lines("src/day_2/input.txt") {
         for line in lines {
             if let Ok(calories) = line {
                 let opp_choice: RPS;

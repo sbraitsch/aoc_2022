@@ -9,3 +9,11 @@ where P: AsRef<Path>, {
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
 }
+
+pub fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
+    let file = File::open(filename).expect("no such file");
+    let buf = io::BufReader::new(file);
+    buf.lines()
+        .map(|l| l.expect("Could not parse line"))
+        .collect()
+}
