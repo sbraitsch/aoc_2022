@@ -1,12 +1,28 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, time::Instant};
 
 use super::utils::read_string;
 
 pub fn day6() {
+    //naive/intuitive version
+    let now = Instant::now();
     let sequence = read_string("src/day_6/input.txt").chars().collect::<Vec<char>>();
     let sol_1 = solution_1(&sequence);
     let sol_2 = solution_2(&sequence);
-    println!("Day 6 | Part 1: {:?}\nDay 6 | Part 2: {:?}", sol_1, sol_2)
+    println!("Day 6 | Part 1: {:?}\nDay 6 | Part 2: {:?}", sol_1, sol_2);
+    println!("Took: {:?}", now.elapsed());
+
+    let compare = Instant::now();
+
+    // bitcounting version. much faster
+    // shifts once by char value compared to 'a', counts 1's for each window.
+    // matches window size if all chars are unique
+    let scan = |size| size + include_bytes!("input.txt")
+        .windows(size)
+        .position(|w| w.iter().fold(0u32, |c, b| c | 1 << b - b'a').count_ones() as usize == size)
+        .unwrap();
+
+    println!("Day 6 | Part 1: {:?}\nDay 6 | Part 2: {:?}", scan(4), scan(14));
+    println!("Took: {:?}", compare.elapsed());
 }
 
 fn solution_1(sequence: &Vec<char>) -> usize {
