@@ -21,8 +21,7 @@ fn solution_2(sequence: &Vec<char>) -> usize {
 
 fn index_of_unique_window(sequence: &Vec<char>, window_size: usize) -> usize {
     for (i, window) in sequence.windows(window_size).enumerate() {
-        let mut uniques = HashSet::new();
-        window.iter().for_each(|e| { uniques.insert(e.clone()); });
+        let uniques: HashSet<&char> = HashSet::from_iter(window.iter());
         if uniques.len() == window_size {
             return i + window_size
         }
