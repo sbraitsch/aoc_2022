@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::fs::{File, read_to_string};
 use std::io::{self, BufRead};
 use std::path::Path;
 
@@ -16,4 +16,8 @@ pub fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
     buf.lines()
         .map(|l| l.expect("Could not parse line"))
         .collect()
+}
+
+pub fn read_string(filename: impl AsRef<Path>) -> String {
+    read_to_string(filename).unwrap()
 }
