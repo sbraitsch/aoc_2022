@@ -52,12 +52,8 @@ fn parse_file_structure(commands: Vec<String>) -> HashMap<Vec<String>, usize> {
 }
 
 fn update_past_dirs(current_dir: &Vec<String>, directory_sizes: &mut HashMap<Vec<String>, usize>, current_dir_size: usize) {
-    let mut parent_directories: Vec<String> = Vec::new();
-    for partial in current_dir.iter() {
-        parent_directories.push(partial.to_string());
-        if !directory_sizes.contains_key(&parent_directories) {
-            directory_sizes.insert(parent_directories.clone(), 0);
-        }
-        *directory_sizes.get_mut(&parent_directories).unwrap() += current_dir_size;
+    for dir in 0..current_dir.len() {
+        let partial = &current_dir[0..=dir];
+        directory_sizes.entry(Vec::from(partial)).and_modify(|s| *s += current_dir_size).or_insert(current_dir_size);
     }
 }
