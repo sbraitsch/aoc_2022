@@ -1,8 +1,7 @@
-use super::utils::lines_from_file;
+use crate::utils::input_lines;
 
 pub fn day4() {
-    let input = lines_from_file("src/day_4/input.txt");
-    let tuples: Vec<((usize, usize), (usize, usize))> = input.iter()
+    let tuples: Vec<((usize, usize), (usize, usize))> = input_lines(4).iter()
         .map(|s| s.split_once(','))
         .map(|r| (r.unwrap().0.split_once('-').unwrap(), r.unwrap().1.split_once('-').unwrap()))
         .map(|(a, b)| ((a.0.parse::<usize>().unwrap(), a.1.parse::<usize>().unwrap()), (b.0.parse::<usize>().unwrap(), b.1.parse::<usize>().unwrap())))

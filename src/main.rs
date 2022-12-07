@@ -6,7 +6,6 @@
 #[path = "day_5/solution.rs"] mod day5;
 #[path = "day_6/solution.rs"] mod day6;
 #[path = "day_7/solution.rs"] mod day7;
-
 mod utils;
 
 fn main() {

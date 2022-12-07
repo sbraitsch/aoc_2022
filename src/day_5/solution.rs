@@ -1,7 +1,7 @@
-use super::utils::lines_from_file;
+use crate::utils::input_lines;
 
 pub fn day5() {
-    let input = lines_from_file("src/day_5/input.txt");
+    let input = input_lines(5);
     let (crates, moves_raw) = input.split_at(10);
 
     let mut stacks: Vec<Vec<char>> = Vec::new();

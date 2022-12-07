@@ -1,6 +1,6 @@
 use core::panic;
 use std::ops;
-use super::utils::read_lines;
+use crate::utils::input_lines;
 
 
 #[derive(Clone, Copy, PartialEq)]
@@ -64,45 +64,37 @@ pub fn day2() {
 
 fn solution_1() -> u32 {
     let mut temp_sum: u32 = 0;
-    if let Ok(lines) = read_lines("src/day_2/input.txt") {
-        for line in lines {
-            if let Ok(calories) = line {
-                let opp_choice: RPS;
-                let your_choice: RPS;
-                if let Some(x) = calories.chars().nth(0) {
-                    opp_choice = x.try_into().unwrap();
-                    if let Some(y) = calories.chars().nth(2) {
-                        your_choice = y.try_into().unwrap();
-                        temp_sum += (opp_choice + your_choice) as u32
-                    }
+    for line in input_lines(2) {
+        let opp_choice: RPS;
+            let your_choice: RPS;
+            if let Some(x) = line.chars().nth(0) {
+                opp_choice = x.try_into().unwrap();
+                if let Some(y) = line.chars().nth(2) {
+                    your_choice = y.try_into().unwrap();
+                    temp_sum += (opp_choice + your_choice) as u32
                 }
             }
-        }
     }
     temp_sum
 }
 
 fn solution_2() -> u32 {
     let mut temp_sum: u32 = 0;
-    if let Ok(lines) = read_lines("src/day_2/input.txt") {
-        for line in lines {
-            if let Ok(calories) = line {
-                let opp_choice: RPS;
-                let your_choice: RPS;
-                if let Some(x) = calories.chars().nth(0) {
-                    opp_choice = x.try_into().unwrap();
-                    if let Some(y) = calories.chars().nth(2) {
-                        your_choice = match y {
-                            'X' => opp_choice.wins_against(),
-                            'Y' => opp_choice,
-                            'Z' => opp_choice.loses_to(),
-                            _ => panic!("Error parsing input.")
-                        };
-                        temp_sum += (opp_choice + your_choice) as u32
-                    }
+    for line in input_lines(2) {
+        let opp_choice: RPS;
+            let your_choice: RPS;
+            if let Some(x) = line.chars().nth(0) {
+                opp_choice = x.try_into().unwrap();
+                if let Some(y) = line.chars().nth(2) {
+                    your_choice = match y {
+                        'X' => opp_choice.wins_against(),
+                        'Y' => opp_choice,
+                        'Z' => opp_choice.loses_to(),
+                        _ => panic!("Error parsing input.")
+                    };
+                    temp_sum += (opp_choice + your_choice) as u32
                 }
             }
-        }
     }
     temp_sum
 }

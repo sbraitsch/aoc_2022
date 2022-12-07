@@ -1,4 +1,4 @@
-use super::utils::lines_from_file;
+use crate::utils::input_lines;
 
 pub fn day3() {
     let sol_1 = solution_1();
@@ -9,8 +9,7 @@ pub fn day3() {
 
 fn solution_1() -> usize{
     let mut priority_sum = 0;
-    let input = lines_from_file("src/day_3/input.txt");
-    for line in input {
+    for line in input_lines(3) {
         let (a, b) = line.split_at(line.len() / 2);
         for item in a.chars() {
             if b.contains(item) {
@@ -24,8 +23,7 @@ fn solution_1() -> usize{
 
 fn solution_2() -> usize{
     let mut priority_sum = 0;
-    let input = lines_from_file("src/day_3/input.txt");
-    for chunk in input.chunks(3) {
+    for chunk in input_lines(3).chunks(3) {
         let (a,b,c) = (&chunk[0],&chunk[1],&chunk[2]);
         for item in a.chars() {
             if b.contains(item) && c.contains(item) {

@@ -1,11 +1,11 @@
 use std::{collections::HashSet, time::Instant};
 
-use super::utils::read_string;
+use crate::utils::input_string;
 
 pub fn day6() {
     //naive/intuitive version
     let now = Instant::now();
-    let sequence = read_string("src/day_6/input.txt").chars().collect::<Vec<char>>();
+    let sequence = input_string(6).chars().collect::<Vec<char>>();
     let sol_1 = solution_1(&sequence);
     let sol_2 = solution_2(&sequence);
     println!("Day 6 | Part 1: {:?}\nDay 6 | Part 2: {:?}", sol_1, sol_2);

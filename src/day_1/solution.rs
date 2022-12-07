@@ -1,23 +1,19 @@
 use std::collections::BinaryHeap;
-use super::utils::read_lines;
+use crate::utils::input_lines;
 
 
 pub fn day1() {
     let mut bin_heap = BinaryHeap::new();
 
-    if let Ok(lines) = read_lines("src/day_1/input.txt") {
-        let mut temp_sum = 0;
-        for line in lines {
-            if let Ok(calories) = line {
-               if calories == ""  {
+    let mut temp_sum = 0;
+        for line in input_lines(1) {
+            if line == ""  {
                 bin_heap.push(temp_sum);
                 temp_sum = 0
                } else {
-                temp_sum += calories.parse::<usize>().unwrap();
+                temp_sum += line.parse::<usize>().unwrap();
                }
-            }
         }
-    }
 
     let sol_1 = solution_1(&mut bin_heap);
     let sol_2 = solution_2(&mut bin_heap);
