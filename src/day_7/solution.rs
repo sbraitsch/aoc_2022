@@ -8,7 +8,7 @@ pub fn day7() {
 
     let dir_structure = parse_file_structure(commands);
 
-    println!("Day 6 | Part 1: {:?}\nDay 6 | Part 2: {:?}", solution_1(&dir_structure), solution_2(&dir_structure));
+    println!("Day 7 | Part 1: {:?}\nDay 7 | Part 2: {:?}", solution_1(&dir_structure), solution_2(&dir_structure));
     println!("Took: {:?}", now.elapsed());
 }
 
