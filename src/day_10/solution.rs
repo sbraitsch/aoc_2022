@@ -11,7 +11,7 @@ pub fn day10() {
         } else { ops.push(0) }
     }
 
-    println!("Day 10 | Part 1: {:?}\nDay 9 | Part 10:\n", solution_1(&ops));
+    println!("Day 10 | Part 1: {:?}\nDay 10 | Part 2:\n", solution_1(&ops));
     solution_2(&ops);
     println!("Took: {:?}", now.elapsed());
 }

@@ -19,7 +19,7 @@ pub fn day11() {
     monkeys.push(RefCell::new(Monkey { items: VecDeque::from(vec![86,70,60,88,88,78,74,83]), op: |item| item + 4, test_div: (11, 1, 2), inspections: 0 }));
     monkeys.push(RefCell::new(Monkey { items: VecDeque::from(vec![81,58]), op: |item| item + 5, test_div: (17, 3, 5), inspections: 0 }));
 
-    println!("Day 10 | Part 1: {:?}\nDay 9 | Part 10: {:?}", solution_1(&mut monkeys.clone()), solution_2(&mut monkeys.clone()));
+    println!("Day 11 | Part 1: {:?}\nDay 11 | Part 2: {:?}", solution_1(&mut monkeys.clone()), solution_2(&mut monkeys.clone()));
     println!("Took: {:?}", now.elapsed());
 }
 
