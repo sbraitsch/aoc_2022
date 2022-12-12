@@ -75,11 +75,9 @@ fn shortest_path(maze: &Vec<u8>, start: usize, target: usize, dim_x: usize, dim_
         } else {
             for adj in get_adjacent(idx, dim_x, dim_y) {
                 let adj_elevation = maze[adj];
-                if adj_elevation as i8 - elevation as i8 > 1 && !p2 { 
+                if (adj_elevation as i8 - elevation as i8 > 1 && !p2) || (elevation as i8 - adj_elevation as i8 > 1 && p2) { 
                     continue; 
-                } else if elevation as i8 - adj_elevation as i8 > 1 && p2 {
-                    continue;
-                };
+                }
                 if visited.insert(adj) {
                     open_list.push(Node { idx: adj, elevation: adj_elevation, cost: cost + 1 });
                 }
