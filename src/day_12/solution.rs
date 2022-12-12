@@ -1,19 +1,32 @@
-use std::{time::Instant, collections::BTreeSet};
+use std::{time::Instant, collections::{BinaryHeap, HashSet}, cmp::Ordering};
 
 use crate::utils::input_lines;
 
-#[derive(Debug, Clone)]
+#[derive(Eq, PartialEq, Debug, Clone)]
 struct Node {
     idx: usize,
-    elevation: usize,
+    elevation: u8,
     cost: usize
+}
+
+// reverse natural order to create minheap
+impl Ord for Node {
+    fn cmp(&self, other: &Self) -> Ordering {
+        other.cost.cmp(&self.cost)
+    }
+}
+
+impl PartialOrd for Node {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
 }
 
 pub fn day12() {
     let now = Instant::now();
-    let mut map: Vec<Node> = Vec::new();
-    let mut start: (usize, usize) = (0, 0);
-    let mut target: (usize, usize) = (0, 0);
+    let mut map: Vec<u8> = Vec::new();
+    let mut start = 0;
+    let mut target = 0;
     let input = input_lines(12);
     let dim_x = input.first().unwrap().len();
     let dim_y = input.len();
@@ -22,31 +35,58 @@ pub fn day12() {
         for (x, height) in row.chars().enumerate() {
             match height {
                 'S' => { 
-                    start = (x, y);
-                    map.push(Node { idx: (y * dim_x) + x, cost: 0, elevation: 1});
+                    start = x + y * dim_x;
+                    map.push(1);
                 },
                 'E' => { 
-                    target = (x, y);
-                    map.push(Node { idx: (y * dim_x) + x, cost: 0, elevation: 26});
+                    target = x + y * dim_x;
+                    map.push(26);
                 },
                 c => {
-                    let height = c as usize - 96;
-                    map.push(Node { idx: (y * dim_x) + x, cost: 0, elevation: height});
+                    let height = c as u8 - 96;
+                    map.push(height);
                 }
             }
         }
     }
 
-    println!("Day 12 | Part 1: {:?}\nDay 12 | Part 2: {:?}", solution_1(&mut map.clone(), start, target, dim_x, dim_y), solution_2(&mut map.clone(), target, dim_x, dim_y));
+    println!("Day 12 | Part 1: {:?}\nDay 12 | Part 2: {:?}", solution_1(&map, start, target, dim_x, dim_y), solution_2(&map, target, dim_x, dim_y));
     println!("Benchmark: {:?}", now.elapsed());
 }
 
-fn solution_1(map: &mut Vec<Node>, start: (usize, usize), target: (usize, usize), dim_x: usize, dim_y: usize) -> usize {
+fn solution_1(map: &Vec<u8>, start: usize, target: usize, dim_x: usize, dim_y: usize) -> usize {
     shortest_path(map, start, target, dim_x, dim_y, false)
 }
 
-fn solution_2(map: &mut Vec<Node>, target: (usize, usize), dim_x: usize, dim_y: usize) -> usize {
-    shortest_path(map, target, (0, 0), dim_x, dim_y, true)
+fn solution_2(map: &Vec<u8>, target: usize, dim_x: usize, dim_y: usize) -> usize {
+    shortest_path(map, target, 0, dim_x, dim_y, true)
+}
+
+fn shortest_path(maze: &Vec<u8>, start: usize, target: usize, dim_x: usize, dim_y: usize, p2: bool)-> usize {
+    let mut open_list = BinaryHeap::new();
+    let mut visited: HashSet<usize> = HashSet::new();
+
+    open_list.push(Node { idx: start, elevation: maze[start], cost: 0});
+    visited.insert(start);
+
+    while let Some(Node {idx, elevation, cost}) = open_list.pop() {
+        if (p2 && elevation == 1) || (!p2 && idx == target) {
+            return cost;
+        } else {
+            for adj in get_adjacent(idx, dim_x, dim_y) {
+                let adj_elevation = maze[adj];
+                if adj_elevation as i8 - elevation as i8 > 1 && !p2 { 
+                    continue; 
+                } else if elevation as i8 - adj_elevation as i8 > 1 && p2 {
+                    continue;
+                };
+                if visited.insert(adj) {
+                    open_list.push(Node { idx: adj, elevation: adj_elevation, cost: cost + 1 });
+                }
+            }
+        }
+    }
+    0
 }
 
 fn get_adjacent<'a>(idx: usize, dim_x: usize, dim_y: usize) -> Vec<usize> {
@@ -64,42 +104,4 @@ fn get_adjacent<'a>(idx: usize, dim_x: usize, dim_y: usize) -> Vec<usize> {
 
 fn get_idx(x: usize, y: usize, dim_x: usize) -> usize {
     (y * dim_x) + x
-}
-
-fn shortest_path(maze: &mut Vec<Node>, (start_x, start_y): (usize, usize), (target_x, target_y): (usize, usize), dim_x: usize, dim_y: usize, p2: bool)-> usize {
-    let mut open_list = BTreeSet::new();
-    let mut closed_list: Vec<usize> = Vec::new();
-
-    let target = get_idx(target_x, target_y, dim_x);
-    open_list.insert((0, get_idx(start_x, start_y, dim_x)));
-
-    while !open_list.is_empty() {
-        let (cur_cost, current_idx) = open_list.pop_first().unwrap();
-        let current_node = maze[current_idx].clone();
-        if (p2 && current_node.elevation == 1) || (!p2 && current_idx == target) {
-            return current_node.cost;
-        } else {
-            closed_list.push(current_idx);
-            for adj in get_adjacent(current_idx, dim_x, dim_y) {
-                let adj_node = &mut maze[adj];
-                if !closed_list.contains(&adj) {
-                    if adj_node.elevation as i8 - current_node.elevation as i8 > 1 && !p2 { 
-                        continue; 
-                    } else if current_node.elevation as i8 - adj_node.elevation as i8 > 1 && p2 {
-                        continue;
-                    };
-                    let cost_through_current = cur_cost + 1;
-                    if open_list.iter().find(|(_, i)| i == &adj).is_none() {
-                        adj_node.cost = cost_through_current;
-                        open_list.insert((cost_through_current, adj));
-                    } else{
-                        if cost_through_current < adj_node.cost {
-                            adj_node.cost = cost_through_current;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    0
 }
