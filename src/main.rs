@@ -11,6 +11,7 @@
 #[path = "day_10/solution.rs"] mod day10;
 #[path = "day_11/solution.rs"] mod day11;
 #[path = "day_12/solution.rs"] mod day12;
+#[path = "day_13/solution.rs"] mod day13;
 
 mod utils;
 
@@ -26,5 +27,6 @@ fn main() {
     //day9::day9();
     //day10::day10();
     //day11::day11();
-    day12::day12();
+    //day12::day12();
+    day13::day13();
 }
